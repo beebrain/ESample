@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /
+
+# Redirect all requests to the home subfolder
+RewriteCond %{REQUEST_URI} !^/home/
+RewriteRule ^(.*)$ /home/$1 [L]
+
+# If the requested file or directory doesn't exist in /home, redirect to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /home/index.html [L]

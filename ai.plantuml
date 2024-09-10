@@ -1,0 +1,13 @@
+
+@startuml
+
+start
+:Data Collection;
+:Data Preprocessing;
+
+Data Formatting
+Data Cleaning
+Data Transformation
+Data Reduction
+Data Sampling :Enriched Data; split :Training Dataset; split again :Testing Dataset; end split :ML Classification Training; :Hyperparameter Tuning; :Candidate Model; :Model Evaluation; :Model Validation; :Model Predictions; :Predicted Diagnosis; stop
+@enduml
