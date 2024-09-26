@@ -146,24 +146,15 @@ class samplecontrol extends CI_Controller
 
     public function get_testActive()
     {
-
         $this->load->model("samplemodel");
 
-        // $user_info = $this->userModel->getallUser();
-        // Get the search value from the DataTables AJAX request
         $searchValue = $this->input->post('search')['value'];
-
-        // Get the total number of records in the table
         $totalRecords = $this->samplemodel->get_total_records(True);
-
-        // Get the filtered number of records based on the search value and dastaid
         $filteredRecords = $this->samplemodel->get_filtered_records($searchValue, True);
 
-        // Get the sorting parameters from the DataTable
         $orderColumn = $this->input->post('order')[0]['column'];
         $orderDir = $this->input->post('order')[0]['dir'];
 
-        // Map DataTable's column index to your actual database column names
         $columns = array(
             0 => 'testid',
             1 => 'sci_id',
@@ -174,14 +165,17 @@ class samplecontrol extends CI_Controller
             6 => 'createDate',
         );
 
-        // Get the data for the current page with sorting applied
         $start = $this->input->post('start');
         $length = $this->input->post('length');
 
-        // $data = $this->userModel->getallUser()
         $data = $this->samplemodel->get_datatable($start, $length, $searchValue, $columns[$orderColumn], $orderDir, True);
 
-        // Prepare the response for DataTables
+        // Check completion status for each test
+        foreach ($data as $test) {
+            $status = $this->samplemodel->check_test_completion_and_response($test->testid);
+            $test->servicesCompleted = $status ? $status->servicesCompleted : false;
+            $test->userResponseComplete = $status ? $status->userResponseComplete : false;
+        }
         $response = array(
             "draw" => intval($this->input->post('draw')),
             "recordsTotal" => $totalRecords,
@@ -189,7 +183,6 @@ class samplecontrol extends CI_Controller
             "data" => $data
         );
 
-        // Send the response as JSON
         echo json_encode($response);
     }
 
@@ -217,11 +210,22 @@ class samplecontrol extends CI_Controller
 
 
             $docnumber = $this->samplemodel->updateActive($uid, $inputdata["trackid"], $inputdata["fileaddress"], $controldoc);
-            $operationnumber = $this->samplemodel->updateOperation($inputdata["trackid"], $controldoc);
+
+
+            $getactivatedate = $this->samplemodel->gettestappwithid($inputdata["trackid"])->result()[0]->activeDate;
+
+            $datetime = new DateTime($getactivatedate);
+            $newYear = $datetime->format('Y') + 543;
+            $activedate = $datetime->format('d-m-') . $newYear;
+
+
+            $operationnumber = $this->samplemodel->updateOperation($inputdata["trackid"], $controldoc, $activedate);
 
 
             $this->controlSamplemodel->updateoperationNumber($operationnumber);
             $this->controlSamplemodel->updatedocnumber($docnumber);
+
+
             $datainfo["info"] = "success";
         } else {
             $datainfo["info"] = "duplication";
@@ -279,6 +283,30 @@ class samplecontrol extends CI_Controller
         echo json_encode($response);
     }
 
+    private function formatThaiDate($date)
+    {
+        if (!$date || $date == null) return '';
+        $timestamp = strtotime($date);
+        $thai_month_arr = array(
+            "ม.ค.",
+            "ก.พ.",
+            "มี.ค.",
+            "เม.ย.",
+            "พ.ค.",
+            "มิ.ย.",
+            "ก.ค.",
+            "ส.ค.",
+            "ก.ย.",
+            "ต.ค.",
+            "พ.ย.",
+            "ธ.ค."
+        );
+        $thai_date_return = date("d", $timestamp);
+        $thai_date_return .= "/" . $thai_month_arr[date("m", $timestamp) - 1];
+        $thai_date_return .= "/" . (date("Y", $timestamp) + 543);
+        return $thai_date_return;
+    }
+
     public function get_data_assigment()
     {
 
@@ -301,6 +329,8 @@ class samplecontrol extends CI_Controller
 
         $result = $this->Sampletestservicemodel->getworkAssigment($start, $length,  $search, $completed, $uid);
 
+
+
         $data = array();
         foreach ($result['data'] as $row) {
             $data[] = array(
@@ -310,7 +340,11 @@ class samplecontrol extends CI_Controller
                 'service' => $row->service,
                 'method' => $row->method,
                 'senderAgencyname' => $row->senderAgencyname,
-                'assigntime' => date('d/m/Y', strtotime($row->assigntime))
+                'assigntime' => $this->formatThaiDate($row->assigntime),
+                'completetime' => ($row->completetime <> "") ? $this->formatThaiDate($row->completetime) : "",
+                'id' => $row->id,
+                'testvalue' => $row->testvalue,
+                'methodName' => $row->methodName,
             );
         }
 
@@ -322,5 +356,93 @@ class samplecontrol extends CI_Controller
         );
 
         echo json_encode($output);
+    }
+
+
+
+    public function update_sample_test()
+    {
+        // Ensure this is a POST request
+        if ($this->input->method() !== 'post') {
+            $this->output->set_status_header(405)->set_output(json_encode(['success' => false, 'message' => 'Method Not Allowed']));
+            return;
+        }
+
+        // user who save
+        $userdata = $this->session->userdata('user_data');
+        $uid = $userdata["uid"];
+
+
+        // Get the data from the POST request
+        $id = $this->input->post('id');
+        $testvalue = $this->input->post('testvalue');
+        $methodName = $this->input->post('methodName');
+
+        // Validate the data
+        if (!$id || !is_numeric($id)) {
+            $this->output->set_status_header(400)->set_output(json_encode(['success' => false, 'message' => 'Invalid ID']));
+            return;
+        }
+
+        // Load the model
+        $this->load->model("Sampletestservicemodel");
+
+        // Update the database
+        $result = $this->Sampletestservicemodel->updateSampleTest($id, [
+            'testvalue' => $testvalue,
+            'methodName' => $methodName,
+            'completetime' => date('Y-m-d H:i:s') // Set the completion time to now
+        ]);
+
+        if ($result) {
+            $this->output->set_output(json_encode([
+                'success' => true,
+                'message' => 'Data updated successfully'
+            ]));
+        } else {
+            $this->output->set_status_header(500)->set_output(json_encode([
+                'success' => false,
+                'message' => 'Database update failed'
+            ]));
+        }
+    }
+
+
+    public function getAllResultOperation()
+    {
+
+        $sampleid = $this->input->post("sampleid");
+        $this->load->model("Sampletestservicemodel");
+
+        $condition = array("sampleid" => $sampleid);
+        $result = $this->Sampletestservicemodel->getSampleservice($condition)->result();
+
+        echo json_encode($result);
+    }
+
+    public function get_method_names()
+    {
+        $this->load->model('methodmodel'); // Make sure to load your model
+        $methods = $this->methodmodel->get_method_names(); // Create this method in your model
+        echo json_encode($methods);
+    }
+
+
+    public function checkServicesCompleted()
+    {
+
+        $this->load->model('samplemodel');
+        $query = $this->samplemodel->checkiscomplete();
+        $results = array();
+        foreach ($query->result() as $row) {
+            $results[] = array(
+                'sampleid' => $row->sampleid,
+                'operationnumber' => $row->operationnumber,
+                'samplename' => $row->samplename,
+                'allCompleted' => ($row->total_services > 0 && $row->total_services == $row->completed_services)
+            );
+        }
+
+        return $results;
     }
 }

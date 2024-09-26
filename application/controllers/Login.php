@@ -14,8 +14,6 @@ class Login extends CI_Controller
     {
         // call BPT Google Login
         // redirect('https://info.uru.ac.th/bptcarbon/academic/');
-
-
         $this->login();
     }
 
@@ -25,11 +23,6 @@ class Login extends CI_Controller
     {
         include_once APPPATH . "libraries/vendor/autoload.php";
         $google_client = new Google_Client();
-        // $google_client->setClientId('28727286134-7elrlqsgu9idbbu2tbckotu2u2cjkdou.apps.googleusercontent.com'); //Define your ClientID
-        // $google_client->setClientSecret('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'); //Define your Client Secret Key
-        // $google_client->setRedirectUri(base_url().'index.php/login/login'); //Define your Redirect Uri
-        // $google_client->addScope('email');
-        // $google_client->addScope('profile');
 
         $google_client->setClientId('741576809790-ftb1e5e9d9j5ugpjj1j0slgu3punu603.apps.googleusercontent.com'); //Define your ClientID
         $google_client->setClientSecret('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'); //Define your Client Secret Key

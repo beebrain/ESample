@@ -22,6 +22,29 @@
             z-index: 1080 !important;
         }
     </style>
+
+    <style>
+        .status-icon-container {
+            margin-left: 5px;
+            display: inline-block;
+        }
+
+        .status-icon-container .fa-check-circle,
+        .status-icon-container .fa-user-check {
+            color: #28a745;
+            font-size: 0.8em;
+        }
+
+        .status-icon-container .fa-clock,
+        .status-icon-container .fa-user-clock {
+            color: #ffc107;
+            font-size: 0.8em;
+        }
+
+        .status-icon-container i {
+            margin-right: 3px;
+        }
+    </style>
 </head>
 
 <body class=" color-light ">
@@ -129,7 +152,7 @@
                                             <li>
                                                 รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ
                                                 <ul>
-                                                    <li id="text_Reportuncertainty"></li>
+                                                    <li id="textReportuncertainty"></li>
 
                                                 </ul>
                                             </li>
@@ -211,7 +234,7 @@
                                     <tr class="ligth ligth-data">
 
                                         <th>testid</th>
-                                        <th>TrackNo</th>
+                                        <th>เลขที่หนังสือ</th>
                                         <th>samplename</th>
                                         <th>senderAgencyname</th>
                                         <th>telephone</th>
@@ -291,10 +314,21 @@
                         "data": "testid"
                     },
                     {
-                        "data": "trackNo"
+                        "data": "docnumber"
                     },
                     {
-                        "data": "sampleName"
+                        "data": "sampleName",
+                        "render": function(data, type, row) {
+                            var serviceIcon = row.servicesCompleted ?
+                                '<i class="fa fa-check-circle text-success" title="All services completed"></i>' :
+                                '<i class="fa fa-clock text-warning" title="Services in progress"></i>';
+
+                            var responseIcon = row.userResponseComplete ?
+                                '<i class="fa fa-user-check text-success" title="User response complete"></i>' :
+                                '<i class="fa fa-user-clock text-warning" title="Awaiting user response"></i>';
+
+                            return data + ' <span class="status-icon-container">' + serviceIcon + ' ' + responseIcon + '</span>';
+                        }
                     },
                     {
                         "data": "senderAgencyname"
@@ -326,6 +360,7 @@
                                 '<a class="btn btn-sm bg-primary"  data-toggle="tooltip" data-placement="top" title="แสดงรายละเอียดข้อมูล" data-original-title="Add" onclick="showdetail(\'' + row.testid + '\')"><i class="ri-eye-line mr-0"></i></a>' +
                                 ' <a class="btn btn-sm bg-success"  data-toggle="tooltip" data-placement="top" title="แสดงเอกสารหลักฐาน" data-original-title="Edit" onclick="showdoc(\'' + row.testid + '\')"><i class="ri-pencil-line mr-0"></i></a>' +
                                 ' <a class="btn btn-sm bg-warning" data-toggle="tooltip" data-placement="top" title="กำหนดผู้รับผิดชอบตัวอย่าง" data-original-title="Delete" onclick="addstaff(\'' + row.testid + '\')"><i class=" ri-contacts-line mr-0"></i></a>' +
+                                ' <a class="btn btn-sm bg-info" data-toggle="tooltip" data-placement="top" title="แสดงรายละเอียดOperation"  onclick="showOperation(\'' + row.testid + '\')"><i class=" ri-book-line mr-0"></i></a>' +
                                 '</div>';
                         }
                     }
@@ -342,6 +377,11 @@
             window.open('<?php echo base_url('index.php/sample/samplepanel/createPDF') ?>' + '/' + recallTrack, '_blank');
         }
 
+
+        function showOperation(testid) {
+
+            window.open('<?php echo base_url('index.php/Result/resultpanel/genreportTester') ?>' + '/' + testid, '_blank');
+        }
 
         function showdoc(lastid) {
             var dataToSend = {
@@ -408,7 +448,7 @@
                     const textRegistrationDate = document.getElementById("text_RegistrationDate");
 
 
-                    const textReportuncertainty = document.getElementById("text_Reportuncertainty");
+                    const textReportmethodName = document.getElementById("textReportuncertainty");
                     const textMethodTest = document.getElementById("text_MethodTest");
                     const textReturnsample = document.getElementById("text_Returnsample");
 
@@ -448,7 +488,7 @@
                     }
 
 
-                    textReportuncertainty.textContent = sampledata.Reportuncertainty;
+                    textReportmethodName.textContent = sampledata.ReportmethodName;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

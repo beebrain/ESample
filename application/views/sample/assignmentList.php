@@ -60,118 +60,42 @@
         </div> -->
 
 
-        <div class="modal fade" id="new-order" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="card" id="testappprocess">
-                            <div class="card-header d-flex justify-content-between bg-primary header-invoice">
-                                <div class="iq-header-title">
-                                    <h4 class="card-title mb-0">ใบยืนยันการส่งตัวอย่าง</h4>
-                                </div>
-
-                            </div>
-
-                            <div class="card-body">
-                                <h4 class="mb-3">ข้อมูลทั่วไป</h4>
-                                <dl class="row">
-                                    <dt class="col-sm-2">ชื่อตัวอย่าง</dt>
-                                    <dd class="col-sm-6" id="text_samplename"></dd>
-                                    <dt class="col-sm-1">วันนำส่ง</dt>
-                                    <dd class="col-sm-3" id="text_datetime"></dd>
-                                    <dt class="col-sm-2">ชื่อผู้นำส่ง</dt>
-                                    <dd class="col-sm-6" id="text_senderagencyname"></dd>
-                                    <dt class="col-sm-1">ผู้นำส่ง</dt>
-                                    <dd class="col-sm-3" id="text_agencytype"></dd>
-                                    <dt class="col-sm-2">ที่อยู่</dt>
-                                    <dd class="col-sm-6" id="text_address"></dd>
-                                    <dt class="col-sm-1">จังหวัด</dt>
-                                    <dd class="col-sm-3" id="text_province"></dd>
-                                    <dt class="col-sm-2">หมายเลขโทรศัพท์</dt>
-                                    <dd class="col-sm-2" id="text_telephone"></dd>
-                                    <dt class="col-sm-1">lineid</dt>
-                                    <dd class="col-sm-3" id="text_lineid"></dd>
-                                    <dt class="col-sm-1">email</dt>
-                                    <dd class="col-sm-3" id="text_email"></dd>
-                                    <dt class="col-sm-2">เลขที่หนังสือนำส่ง</dt>
-                                    <dd class="col-sm-6" id="text_RegistrationNo"></dd>
-                                    <dt class="col-sm-1">ลงวันที่</dt>
-                                    <dd class="col-sm-3" id="text_RegistrationDate"></dd>
-                                    <dt class="col-sm-2">วิธีการส่งตัวอย่าง</dt>
-                                    <dd class="col-sm-10" id="text_sendertype"></dd>
-                                    <dd class="col-sm-12">
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                ตัวอย่างที่นำมาวิเคราะห์ห้องปฏิบัติการ ทางผู้ให้บริการมีนโยบายไม่ดำเนินการจัดเก็บตัวอย่างภายหลังจากการทดสอบเสร็จแล้ว ดังนั้น ท่านมีความประสงค์
-                                                <ul>
-                                                    <li id="text_Returnsample"></li>
-
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ
-                                                <ul>
-                                                    <li id="text_Reportuncertainty"></li>
-
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                การเลือกวิธีทดสอบ
-                                                <ul>
-                                                    <li id="text_MethodTest"></li>
-
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                ท่านมีความประส่งค์ให้ห้องปฏิบัติการให้บริการ
-                                                <ul>
-                                                    <li id="text_s1">ให้เยี่ยมชมห้องปฏิบัติการ</li>
-                                                    <li id="text_s2">ให้บริการภาชนะเก็บตัวอย่าง</li>
-                                                    <li id="text_s3">เทคนิคการตรวจวิเคราะห์</li>
-                                                    <li id="text_s4">เครื่องมือวิเคราะห์</li>
-
-
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </dd>
-
-                                </dl>
-
-
-
-                                <h5>รายละเอียดการนำส่ง</h5>
-                                <div class="table-responsive-sm">
-                                    <table class="table" id="text_ordersample" name="text_ordersample">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center" scope="col">ลำดับ</th>
-                                                <th scope="col">รายการ</th>
-                                                <th class="text-center" scope="col">ราคา</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <button type="button" class="btn btn-primary-dark mr-2" id="printPDF">Print</button>
-
-                            </div>
-                        </div>
-
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">บันทึกผล</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-
-
-
+                    <div class="modal-body">
+                        <form id="editForm">
+                            <input type="hidden" id="editId">
+                            <div class="form-group edit-field">
+                                <label for="editTestValue">ผลการทดสอบ</label>
+                                <input type="text" class="form-control" id="editTestValue">
+                            </div>
+                            <div class="form-group edit-field">
+                                <label for="editmethodName">กระบวนการทดสอบ</label>
+                                <select class="form-control" id="editmethodName">
+                                    <option value="">Loading methods...</option>
+                                </select>
+                                <div id="methodLoadingIndicator" style="display: none;">Loading...</div>
+                            </div>
+                            <div class="display-field" style="display:none;">
+                                <p><strong>ผลการทดสอบ:</strong> <span id="displayTestValue"></span></p>
+                                <p><strong>กระบวนการทดสอบ:</strong> <span id="displaymethodName"></span></p>
+                                <p><strong>Completed Date:</strong> <span id="displayCompletedDate"></span></p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+                    </div>
                 </div>
             </div>
-
-
-
-
-
         </div>
 
 
@@ -200,6 +124,8 @@
                                         <th>Method</th>
                                         <th>PIC</th>
                                         <th>Assign Date</th>
+                                        <th>Completed Date</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -255,7 +181,31 @@
     <script src="<?php echo base_url() ?>/assets/js/app.js"></script>
 
     <script>
+        function fetchMethodNames() {
+            $('#methodLoadingIndicator').show();
+            $.ajax({
+                url: '<?php echo base_url() . 'index.php/Sample/samplecontrol/get_method_names'; ?>',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $('#editmethodName').empty();
+                    $.each(response, function(index, method) {
+                        $('#editmethodName').append($('<option></option>').attr('value', method.id).text(method.methodname));
+                    });
+                    $('#methodLoadingIndicator').hide();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching method names:', error);
+                    $('#methodLoadingIndicator').hide();
+                    $('#editmethodName').html('<option value="">Error loading methods</option>');
+                }
+            });
+        }
+
+
         $(document).ready(function() {
+
+
             var table = $('#sampleTestTable').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -285,12 +235,82 @@
                         "data": "senderAgencyname"
                     },
                     {
-                        "data": "assigntime"
+                        "data": "assigntime",
+
+                    },
+                    {
+                        "data": "completetime",
+
+                    },
+
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return '<button class="btn btn-primary edit-row">info</button>';
+                        }
                     }
                 ]
             });
 
-            // Add a select input to filter completed/uncompleted assignments
+            // Handle edit button click
+            $('#sampleTestTable').on('click', '.edit-row', function() {
+                var row = table.row($(this).parents('tr'));
+                var rowData = row.data();
+
+                $('#editId').val(rowData.id);
+
+                if (rowData.completetime === "") {
+                    $('.edit-field').show();
+                    $('.display-field').hide();
+                    $('#saveChanges').show();
+
+                    $('#editTestValue').val(rowData.testvalue);
+                    fetchMethodNames(); // Call the new function to populate method names
+                } else {
+                    $('.edit-field').hide();
+                    $('.display-field').show();
+                    $('#saveChanges').hide();
+
+                    $('#displayTestValue').text(rowData.testvalue);
+                    $('#displayUnit').text(rowData.unit);
+                    $('#displaymethodName').text(rowData.methodName);
+                    $('#displayCompletedDate').text(rowData.completetime);
+                }
+
+                $('#editModal').modal('show');
+            });
+
+            // Handle save changes button click
+            $('#saveChanges').on('click', function() {
+                var id = $('#editId').val();
+                var testvalue = $('#editTestValue').val();
+                var methodName = $('#editmethodName').val();
+
+                $.ajax({
+                    url: '<?php echo base_url() . 'index.php/Sample/samplecontrol/update_sample_test'; ?>',
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        testvalue: testvalue,
+                        methodName: methodName
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            $('#editModal').modal('hide');
+                            table.ajax.reload(null, false);
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred: ' + error);
+                    }
+                });
+            });
+
+            // Add filter dropdown (unchanged)
             $('<select id="completedFilter" class="btn btn-primary dropdown-toggle"><option value="false">Uncompleted</option><option value="true">Completed</option></select>')
                 .appendTo('#sampleTestTable_wrapper .dataTables_filter');
 

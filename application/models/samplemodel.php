@@ -6,11 +6,12 @@ class samplemodel extends CI_Model
     public function updateActive($uid, $testid, $fileaddress, $controldoc)
     {
         $docnumber = $controldoc->docnumber;
+        $docyear = $controldoc->year;
         $data = array(
             'userActive' => $uid,
             'fileActive' => $fileaddress,
             "testActive" => "1",
-            "docnumber" => $docnumber,
+            "docnumber" => $docnumber . "/" . $docyear,
             "activeDate" => date("Y-m-d")
         );
         $docnumber += 1;
@@ -23,7 +24,7 @@ class samplemodel extends CI_Model
     }
 
 
-    public function updateOperation($testid, $controldoc)
+    public function updateOperation($testid, $controldoc, $activatedate)
     {
         $this->db->where('testid', $testid);
         $this->db->order_by('sampleid', 'ASC');
@@ -31,9 +32,10 @@ class samplemodel extends CI_Model
 
         $this->db->trans_begin();
         $operationnumber = $controldoc->operationnumber;
+
         foreach ($querySampledetail as $key => $value) {
             $data = array(
-                'operationnumber' => $operationnumber,
+                'operationnumber' => $activatedate . "/" . $operationnumber,
             );
             $sampleid = $value->sampleid;
             $operationnumber += 1;
@@ -85,6 +87,14 @@ class samplemodel extends CI_Model
     }
 
 
+
+    public function gettestappwithid($sampleid)
+    {
+        $this->db->where("testid", $sampleid);
+        $querySample = $this->db->get("es_testapp");
+        log_message("Debug", $this->db->last_query());
+        return $querySample;
+    }
     public function getsamplewithid($sampleid)
     {
 
@@ -194,6 +204,62 @@ class samplemodel extends CI_Model
         $this->db->join('es_service', 'es_sampletestservice.serviceid = es_service.id', 'inner');
         $this->db->where('es_sampletest.sampleid', $sampleid); // Filter by sampleid
         $query = $this->db->get();
+        log_message("Debug", $this->db->last_query());
         return $query;
+    }
+
+
+    public function checkiscomplete()
+    {
+        $this->db->select('es_sampletest.sampleid, es_sampletest.operationnumber, es_sampletest.samplename, 
+        COUNT(es_sampletestservice.id) as total_services, 
+        SUM(CASE WHEN es_sampletestservice.completetime IS NOT NULL THEN 1 ELSE 0 END) as completed_services');
+        $this->db->from('es_sampletest');
+        $this->db->join('es_sampletestservice', 'es_sampletest.sampleid = es_sampletestservice.sampleid', 'left');
+        $this->db->group_by('es_sampletest.sampleid');
+        $query = $this->db->get();
+
+        return $query;
+    }
+
+    public function get_test_status($testid = null)
+    {
+        $this->db->select('
+            t.testid,
+            t.docnumber,
+            t.sampleName,
+            t.senderAgencyname,
+            t.telephone,
+            t.reportCharge,
+            t.createDate,
+            COUNT(sts.id) AS total_services,
+            SUM(CASE WHEN sts.completetime IS NOT NULL THEN 1 ELSE 0 END) AS completed_services,
+            SUM(CASE WHEN sts.userrespon IS NOT NULL AND sts.userrespon != 0 THEN 1 ELSE 0 END) AS user_responses
+        ');
+        $this->db->from('es_testapp t');
+        $this->db->join('es_sampletest st', 't.testid = st.testid', 'left');
+        $this->db->join('es_sampletestservice sts', 'st.sampleid = sts.sampleid', 'left');
+        $this->db->where('t.testactive', 1);
+        if ($testid !== null) {
+            $this->db->where('t.testid', $testid);
+        }
+        $this->db->group_by('t.testid');
+
+        $query = $this->db->get();
+        return $testid !== null ? $query->row() : $query->result();
+    }
+
+    public function check_test_completion_and_response($testid)
+    {
+        $test_status = $this->get_test_status($testid);
+
+        if ($test_status) {
+            $status = new stdClass();
+            $status->servicesCompleted = ($test_status->total_services > 0 && $test_status->total_services == $test_status->completed_services);
+            $status->userResponseComplete = ($test_status->total_services > 0 && $test_status->total_services == $test_status->user_responses);
+            return $status;
+        }
+
+        return null;
     }
 }

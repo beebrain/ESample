@@ -51,10 +51,11 @@
         testid = sampledata.testid;
         activeDate = sampledata.activeDate;
         docnumber = sampledata.docnumber;
-        createDate = sampledata.activeDate;
+        createDate = sampledata.createDate;
         if (docnumber === "" || docnumber === "0000") {
             docnumber = "xxx";
         }
+
         createDateYear = parseInt(createDate.substring(0, 4)) + 543 - 2500;
         serviceText = "";
         // activeDate = sampledata.activeDate;
@@ -84,7 +85,7 @@
             textOperation = ++indexno;
             // replace operationNumber with No if null
             if (item.operationnumber !== null) {
-                textOperation = activeDate + "_" + item.operationnumber;
+                textOperation = item.operationnumber;
             }
             tableData.push([{
                     text: textOperation,
@@ -184,7 +185,7 @@
 
             header: {
                 columns: [{
-                    text: 'ศวท.อต ' + docnumber + "/" + createDateYear,
+                    text: 'ศวท.อต ' + docnumber,
                     alignment: 'left'
                 }, {
                     text: 'tracking No : ' + trackingno,

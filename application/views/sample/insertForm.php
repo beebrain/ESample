@@ -239,7 +239,7 @@
                                             <label class="control-label  align-self-center form-control-sm">รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ</label>
                                         </div>
                                         <div class="col-sm-3">
-                                            <select name="Reportuncertainty" id="Reportuncertainty" class="form-control form-control-sm" data-style="py-0" required>
+                                            <select name="ReportmethodName" id="ReportmethodName" class="form-control form-control-sm" data-style="py-0" required>
                                                 <option value="">กรุณาระบุ</option>
                                                 <option>ต้องการ</option>
                                                 <option>ไม่ต้องการ</option>
@@ -376,7 +376,7 @@
                                             <li>
                                                 รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ
                                                 <ul>
-                                                    <li id="text_Reportuncertainty"></li>
+                                                    <li id="textReportuncertainty"></li>
 
                                                 </ul>
                                             </li>
@@ -421,7 +421,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <button type="button" class="btn btn-primary-dark mr-2" onclick="openPDF()" id="pdfbutton"><i class="las la-print"></i> Print
+                                <button type="button" class="btn btn-primary-dark mr-2" id="pdfbutton"><i class="las la-print"></i> Print
                                     Print</button>
 
 
@@ -562,7 +562,7 @@
                         }
                     },
                     Returnsample: "required",
-                    Reportuncertainty: "required",
+                    ReportmethodName: "required",
                     MethodTest: "required"
                 },
                 messages: {
@@ -583,7 +583,7 @@
                     sendertype: "กรุณาระบุวิธีส่ง",
                     othersendertype: "กรุณาระบุวิธีส่งอื่นๆ",
                     Returnsample: "กรุณาระบุความประสงค์เกี่ยวกับการรับตัวอย่างคืน",
-                    Reportuncertainty: "กรุณาระบุความประสงค์เกี่ยวกับรายงานผลค่าความไม่แน่นอน",
+                    ReportmethodName: "กรุณาระบุความประสงค์เกี่ยวกับรายงานผลค่าความไม่แน่นอน",
                     MethodTest: "กรุณาระบุวิธีทดสอบ"
                 },
 
@@ -663,7 +663,7 @@
                     const textRegistrationDate = document.getElementById("text_RegistrationDate");
 
 
-                    const textReportuncertainty = document.getElementById("text_Reportuncertainty");
+                    const textReportmethodName = document.getElementById("textReportuncertainty");
                     const textMethodTest = document.getElementById("text_MethodTest");
                     const textReturnsample = document.getElementById("text_Returnsample");
 
@@ -703,7 +703,7 @@
                     }
 
 
-                    textReportuncertainty.textContent = sampledata.Reportuncertainty;
+                    textReportmethodName.textContent = sampledata.ReportmethodName;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

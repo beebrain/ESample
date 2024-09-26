@@ -204,7 +204,7 @@
                                                 <li>
                                                     รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ
                                                     <ul>
-                                                        <li id="text_Reportuncertainty"></li>
+                                                        <li id="textReportuncertainty"></li>
 
                                                     </ul>
                                                 </li>
@@ -556,7 +556,7 @@
                     const textRegistrationDate = document.getElementById("text_RegistrationDate");
 
 
-                    const textReportuncertainty = document.getElementById("text_Reportuncertainty");
+                    const textReportmethodName = document.getElementById("textReportuncertainty");
                     const textMethodTest = document.getElementById("text_MethodTest");
                     const textReturnsample = document.getElementById("text_Returnsample");
 
@@ -600,7 +600,7 @@
                     }
 
 
-                    textReportuncertainty.textContent = sampledata.Reportuncertainty;
+                    textReportmethodName.textContent = sampledata.ReportmethodName;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

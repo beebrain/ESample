@@ -22,6 +22,24 @@
             z-index: 1080 !important;
         }
     </style>
+
+
+    <style>
+        .status-icon-container {
+            margin-left: 5px;
+            display: inline-block;
+            width: 14px;
+            /* Adjust as needed */
+            text-align: center;
+        }
+
+        .status-icon-container .fa-check-circle {
+            color: #28a745;
+            font-size: 0.8em;
+        }
+    </style>
+
+
 </head>
 
 <body class=" color-light ">
@@ -103,7 +121,7 @@
                                                     <li>
                                                         รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ
                                                         <ul>
-                                                            <li id="text_Reportuncertainty"></li>
+                                                            <li id="textReportuncertainty"></li>
 
                                                         </ul>
                                                     </li>
@@ -316,7 +334,6 @@
                         table.append(tableBody);
                         // Fetch users and populate dropdowns
                         fetchUsers(data);
-
                     },
                     error: function() {
                         alert("Error loading service. Please try again.");
@@ -424,7 +441,7 @@
                         $("#text_sendertype").text("ส่งช่องทางอื่น ๆ รายละเอียด " + sampledata.othersendertype);
                     }
 
-                    $("#text_Reportuncertainty").text(sampledata.Reportuncertainty);
+                    $("#textReportuncertainty").text(sampledata.ReportmethodName);
                     $("#text_MethodTest").text(sampledata.MethodTest);
                     $("#text_Returnsample").text(sampledata.Returnsample);
 
