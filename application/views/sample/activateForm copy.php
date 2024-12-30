@@ -420,7 +420,7 @@
                     }
 
 
-                    textReportmethodName.textContent = sampledata.ReportmethodName;
+                    textReportmethodName.textContent = sampledata.Reportuncertainty;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

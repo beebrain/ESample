@@ -77,6 +77,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="profile-tab-end" data-toggle="tab" href="#profile-end" role="tab" aria-controls="profile" aria-selected="false">กำหนดผู้ทดสอบ</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="review-tab-end" data-toggle="tab" href="#review-end" role="tab" aria-controls="review" aria-selected="false">กำหนดผู้ทวนสอบ</a>
+                            </li>
 
                         </ul>
                         <div class="tab-content" id="myTabContent-5">
@@ -194,6 +197,51 @@
                                 </div>
                             </div>
 
+                            <div class="tab-pane fade" id="review-end" role="tabpanel" aria-labelledby="review-tab-end">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="card">
+                                                <div class="card-header d-flex justify-content-between">
+                                                    <div class="header-title">
+                                                        <h4 class="card-title">กำหนดผู้ทวนสอบ</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form id="reviewerForm" class="needs-validation" novalidate>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="scientist">นักวิเคราะห์ *</label>
+                                                                    <select id="scientist" name="scientist " class="form-control form-control" required>
+                                                                        <!-- Options will be populated by JavaScript -->
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="reviewerSelect">เลือกผู้ทวนสอบ *</label>
+                                                                    <select id="reviewerSelect" name="reviewer" class="form-control form-control" required>
+                                                                        <!-- Options will be populated by JavaScript -->
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row mt-3">
+                                                            <div class="col-md-12">
+                                                                <button type="submit" class="btn btn-primary mr-2">บันทึกข้อมูล</button>
+                                                                <button type="reset" class="btn btn-danger">ล้างข้อมูล</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -249,7 +297,145 @@
         $(document).ready(function() {
             showdetail();
 
+            loadUsers();
+
+
+            $('#reviewerForm').on('submit', function(e) {
+                e.preventDefault();
+                saveReviewers();
+            });
+
         });
+
+        function loadUsers() {
+            $.ajax({
+                url: "<?php echo base_url() . 'index.php/User/Usercontrol/get_listuser_active' ?>",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var users = response.userall;
+
+                    // Populate scientist dropdown
+                    var scientistSelect = $('#scientist');
+                    scientistSelect.empty();
+                    scientistSelect.append($('<option>').val('').text('กรุณาเลือกนักวิเคราะห์'));
+
+                    // Populate reviewer dropdown
+                    var reviewerSelect = $('#reviewerSelect');
+                    reviewerSelect.empty();
+                    reviewerSelect.append($('<option>').val('').text('กรุณาเลือกผู้ทวนสอบ'));
+
+                    // Add users to both dropdowns
+                    $.each(users, function(i, user) {
+                        // Add to scientist dropdown
+                        scientistSelect.append($('<option>')
+                            .val(user.uid)
+                            .text(user.thai_name + ' ' + user.thai_lastname)
+                        );
+
+                        // Add to reviewer dropdown
+                        reviewerSelect.append($('<option>')
+                            .val(user.uid)
+                            .text(user.thai_name + ' ' + user.thai_lastname)
+                        );
+                    });
+
+                    // Check for existing selections
+                    checkExistingSelections();
+                },
+                error: function() {
+                    alert("เกิดข้อผิดพลาดในการโหลดรายชื่อผู้ใช้งาน");
+                }
+            });
+        }
+
+
+        function checkExistingSelections() {
+            var testId = <?php echo $idtest; ?>;
+
+            $.ajax({
+                url: "<?php echo base_url() . 'index.php/sample/samplecontrol/get_reviewers' ?>",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    testid: testId
+                },
+                success: function(response) {
+                    if (response.scientist_id) {
+                        $('#scientist').val(response.scientist_id);
+                    }
+                    if (response.reviewer_id) {
+                        $('#reviewerSelect').val(response.reviewer_id);
+                    }
+
+                    // Check if review_assigntime exists
+                    if (response.review_assigntime) {
+                        disableReviewForm();
+                    }
+                }
+            });
+        }
+
+
+        function disableReviewForm() {
+            // Disable both dropdowns
+            $('#scientist').prop('disabled', true);
+            $('#reviewerSelect').prop('disabled', true);
+
+            // Disable submit button
+            $('#reviewerForm button[type="submit"]').prop('disabled', true);
+            $('#reviewerForm button[type="reset"]').prop('disabled', true);
+
+            // Add visual indication that form is completed
+            $('#reviewerForm').append(
+                '<div class="alert alert-success mt-3" role="alert">' +
+                'การกำหนดผู้ทวนสอบเสร็จสมบูรณ์แล้ว' +
+                '</div>'
+            );
+        }
+
+        function saveReviewers() {
+            var scientistId = $('#scientist').val();
+            var reviewerId = $('#reviewerSelect').val();
+            var testId = <?php echo $idtest; ?>;
+
+            if (!scientistId) {
+                alert("กรุณาเลือกนักวิเคราะห์");
+                return;
+            }
+
+            if (!reviewerId) {
+                alert("กรุณาเลือกผู้ทวนสอบ");
+                return;
+            }
+
+            if (scientistId === reviewerId) {
+                alert("นักวิเคราะห์และผู้ทวนสอบต้องเป็นคนละคนกัน");
+                return;
+            }
+
+            $.ajax({
+                url: "<?php echo base_url() . 'index.php/sample/samplecontrol/save_reviewers' ?>",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    testid: testId,
+                    scientist_id: scientistId,
+                    reviewer_id: reviewerId
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert("บันทึกข้อมูลเรียบร้อยแล้ว");
+                        disableReviewForm();
+                    } else {
+                        alert(response.message || "เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+                    }
+                },
+                error: function() {
+                    alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+                }
+            });
+        }
 
         function formatDate(dateString) {
             if (!dateString) return '-';
@@ -441,7 +627,7 @@
                         $("#text_sendertype").text("ส่งช่องทางอื่น ๆ รายละเอียด " + sampledata.othersendertype);
                     }
 
-                    $("#textReportuncertainty").text(sampledata.ReportmethodName);
+                    $("#textReportuncertainty").text(sampledata.Reportuncertainty);
                     $("#text_MethodTest").text(sampledata.MethodTest);
                     $("#text_Returnsample").text(sampledata.Returnsample);
 

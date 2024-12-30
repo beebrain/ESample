@@ -19,4 +19,7 @@ class controlwebpanel extends CI_Controller
     {
         $this->load->view('control/controlpanel');
     }
+
+
+    public function listmethodTemplate() {}
 }

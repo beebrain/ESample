@@ -23,6 +23,44 @@ class samplemodel extends CI_Model
         return $docnumber;
     }
 
+    public function get_test_by_id($testid)
+    {
+        $this->db->where('testid', $testid);
+        $query = $this->db->get('es_testapp');
+        return $query->row();
+    }
+
+    public function update_reviewer_confirm($testid, $data)
+    {
+        $this->db->where('testid', $testid);
+        return $this->db->update('es_testapp', $data);
+    }
+
+    public function check_test_reviewer($testid, $reviewer_id)
+    {
+        $this->db->where('testid', $testid);
+        $this->db->where('reviewer_id', $reviewer_id);
+        $query = $this->db->get('es_testapp');
+        return $query->num_rows() > 0;
+    }
+
+    public function is_review_confirmed($testid)
+    {
+        $this->db->where('testid', $testid);
+        $this->db->where('reviewer_confirm IS NOT NULL');
+        $query = $this->db->get('es_testapp');
+        return $query->num_rows() > 0;
+    }
+
+    public function updateReviwer($testid, $updateData)
+    {
+
+        $updateData['review_assigntime'] = date('Y-m-d H:i:s');
+
+        $this->db->where('testid', $testid);
+        $this->db->update('es_testapp', $updateData);
+    }
+
 
     public function updateOperation($testid, $controldoc, $activatedate)
     {
@@ -38,7 +76,7 @@ class samplemodel extends CI_Model
                 'operationnumber' => $activatedate . "/" . $operationnumber,
             );
             $sampleid = $value->sampleid;
-            $operationnumber += 1;
+            $operationnumber = sprintf("%05d", intval($operationnumber) + 1);
 
             $this->db->where('sampleid', $sampleid);
             $this->db->update('es_sampletest', $data);
@@ -95,6 +133,8 @@ class samplemodel extends CI_Model
         log_message("Debug", $this->db->last_query());
         return $querySample;
     }
+
+
     public function getsamplewithid($sampleid)
     {
 
@@ -122,11 +162,16 @@ class samplemodel extends CI_Model
 
 
 
-    public function get_total_records($isactive = False)
+    public function get_total_records($isactive = false, $additionalConditions = '')
     {
         if ($isactive) {
             $this->db->where("testActive", "1");
         }
+
+        if ($additionalConditions) {
+            $this->db->where($additionalConditions, NULL, FALSE);
+        }
+
         $this->db->from('es_testapp');
         return $this->db->count_all_results();
     }
@@ -159,40 +204,34 @@ class samplemodel extends CI_Model
     }
 
 
-    public function get_datatable($start, $length, $searchValue, $orderColumn, $orderDir, $isactive = False)
+    public function get_datatable($start, $length, $searchValue, $orderColumn, $orderDir, $additionalConditions = array())
     {
-
         $this->db->select('*');
         $this->db->from('es_testapp t');
 
-        if ($isactive) {
-            $this->db->where("testActive", "1");
+        // Apply additional conditions
+        foreach ($additionalConditions as $condition) {
+            $this->db->where($condition, NULL, FALSE);
         }
 
-        // Apply search query if available
+        // Apply search
         if (!empty($searchValue)) {
             $this->db->group_start();
             $this->db->like('t.testid', $searchValue);
-            $this->db->or_like('t.sci_id', $searchValue);
-            $this->db->or_like('t.trackno', $searchValue);
             $this->db->or_like('t.sampleName', $searchValue);
             $this->db->or_like('t.senderAgencyname', $searchValue);
-            $this->db->or_like('t.telephone', $searchValue);
-            $this->db->or_like('t.reportcharge', $searchValue);
-
             $this->db->group_end();
         }
 
-        // Apply sorting based on DataTable's request
+        // Apply ordering
         if (isset($orderColumn) && isset($orderDir)) {
             $this->db->order_by($orderColumn, $orderDir);
         }
 
-        // Apply LIMIT and OFFSET for pagination
+        // Apply pagination
         $this->db->limit($length, $start);
 
-        $query = $this->db->get();
-        return $query->result();
+        return $this->db->get()->result();
     }
 
     // sample test

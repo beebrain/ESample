@@ -1,3 +1,4 @@
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <div class="iq-sidebar  sidebar-default ">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
         <a href="<?php echo base_url() ?>backend/index.html" class="header-logo">
@@ -13,77 +14,57 @@
             <ul id="iq-sidebar-toggle" class="iq-menu">
                 <li class="active">
                     <a href="<?php echo base_url() . "index.php/Userpanel/index" ?>" class="svg-icon">
-                        <svg class="svg-icon" id="p-dash1" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                            </path>
-                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                        </svg>
-                        <span class="ml-4"> Dashboards </span>
+                        <i class='bx bxs-dashboard'></i>
+                        <span class="ml-4">Dashboards</span>
                     </a>
                 </li>
 
                 <?php
                 $icons = [
-                    'bx bxs-leaf',
-                    'bx bxs-hot',
+                    'bx bx-category',    // Instead of 'bx bxs-leaf'
                     'bx bx-wind',
-                    'bx bxs-trash',
+                    'bx bx-store',
+                    'bx bx-money',
+                    'bx bx-user',
+                    'bx bx-cog',
+                    'bx bx-chart',
+                    'bx bx-folder',
+                    'bx bx-book',
+                    'bx bx-calendar',
+                    'bx bx-envelope',
+                    'bx bx-bell',
                     // Add more icon classes as needed
                 ];
-                $indexicon = -1;
-                foreach ($mainMenu as $row) {
-                    $indexicon++;
+                foreach ($mainMenu as $index => $row) {
+                    $icon = isset($icons[$index]) ? $icons[$index] : 'bx bx-menu'; // Default icon
                 ?>
                     <li class=" ">
-                        <a href="#Menu<?php echo  $row->menuname ?>" class="collapsed" data-toggle="collapse" aria-expanded="false">
-                            <i class='<?php echo $icons[$indexicon] ?>'></i>
-                            <span class="ml-4"><?php echo  $row->menuname ?></span>
+                        <a href="#Menu<?php echo $row->menuname ?>" class="collapsed" data-toggle="collapse" aria-expanded="false">
+                            <i class='<?php echo $icon ?>'></i>
+                            <span class="ml-4"><?php echo $row->menuname ?></span>
                             <svg class="svg-icon iq-arrow-right arrow-active" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="10 15 15 20 20 15"></polyline>
                                 <path d="M4 4h7a4 4 0 0 1 4 4v12"></path>
                             </svg>
                         </a>
 
-                        <ul id="Menu<?php echo  $row->menuname ?>" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                            <?php foreach ($row->submenu as $rowsub) {
-
-                            ?>
+                        <ul id="Menu<?php echo $row->menuname ?>" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
+                            <?php foreach ($row->submenu as $rowsub) { ?>
                                 <li class="">
                                     <?php
                                     $pattern = "/http/";
-
-                                    if (preg_match($pattern, $rowsub->menufunction)) {
+                                    $href = preg_match($pattern, $rowsub->menufunction)
+                                        ? $rowsub->menufunction
+                                        : base_url() . "index.php/" . $rowsub->menufunction;
                                     ?>
-
-                                        <a href="<?php echo  $rowsub->menufunction; ?>">
-
-                                        <?php
-                                    } else {
-
-                                        ?>
-
-                                            <a href="<?php echo base_url() . "index.php/" . $rowsub->menufunction; ?>">
-
-                                            <?php
-                                        }
-                                            ?>
-
-                                            <i class="las la-minus"></i><span><?php echo $rowsub->menuname ?></span>
-                                            </a>
+                                    <a href="<?php echo $href; ?>">
+                                        <i class='bx bx-right-arrow-alt'></i><span><?php echo $rowsub->menuname ?></span>
+                                    </a>
                                 </li>
-                            <?php }
-                            ?>
-
+                            <?php } ?>
                         </ul>
-
-
                     </li>
-                <?php
-
-                }
-                ?>
-
+                <?php } ?>
             </ul>
         </nav>
     </div>

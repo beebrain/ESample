@@ -23,8 +23,45 @@
     var sampleData = <?php echo json_encode($Sample[0]); ?>;
     var sampleDetailData = <?php echo json_encode($Sampledetail); ?>;
 
+    $(document).ready(function() {
+        // genPDF();
+
+    });
+
     function genPDF() {
         createPDFData(sampleData, sampleDetailData);
+    }
+
+    function convertToThaiBuddhistDateTime(dateTimeString) {
+        try {
+            const dateObject = new Date(dateTimeString);
+
+            if (isNaN(dateObject.getTime())) {
+                return "วันที่ไม่ได้ระบุ";
+            }
+
+            const buddhistYear = dateObject.getFullYear() + 543;
+            const thaiMonthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+                "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+            ];
+            const thaiMonth = thaiMonthNames[dateObject.getMonth()];
+            const thaiDay = dateObject.getDate();
+
+            // Format hours and minutes
+            var hours = dateObject.getHours();
+            var minutes = dateObject.getMinutes();
+
+            // Pad single digit numbers with a leading zero
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+
+            var thaiBuddhistDateTime = thaiDay + ' ' + thaiMonth + ' พ.ศ. ' + buddhistYear + ' เวลา ' + hours + ':' + minutes + ' น.';
+
+            return thaiBuddhistDateTime;
+        } catch (error) {
+            console.error(error);
+            return "";
+        }
     }
 
     function getOperationResult(idTest) {
@@ -47,10 +84,6 @@
         });
     }
 
-    $(document).ready(function() {
-        // genPDF();
-        // Your document ready code here
-    });
 
     async function createPDFData(sampledata, sampleDetail) {
         let trackingno = sampledata.trackNo || "";
@@ -61,6 +94,13 @@
         if (docnumber === "" || docnumber === "0000") {
             docnumber = "xxx";
         }
+
+        // Format the latest test result and confirmation times
+        let latestTestResultTime = sampledata.latest_test_result_time ?
+            convertToThaiBuddhistDateTime(sampledata.latest_test_result_time) : 'ไม่ระบุ';
+        let latestConfirmationTime = sampledata.latest_confirmation_time ?
+            convertToThaiBuddhistDateTime(sampledata.latest_confirmation_time) : 'ไม่ระบุ';
+
 
         let createDateYear = parseInt(createDate.substring(0, 4)) + 543 - 2500;
         let serviceText = "";
@@ -157,7 +197,7 @@
 
 
         // Add signature section
-        content.push(createSignatureSection());
+        content.push(createSignatureSection(latestTestResultTime, latestConfirmationTime));
 
         var docDefinition = {
             background: {
@@ -368,14 +408,14 @@
         };
     }
 
-    function createSignatureSection() {
+    function createSignatureSection(latestTestResultTime, latestConfirmationTime) {
         return [{
             columns: [{
                     width: '50%',
                     stack: [{
                             text: 'ลงชื่อ .......................................................',
                         }, {
-                            text: '(                                                 )',
+                            text: '( ' + sampleData.scientist_name.toString() + ' )',
                             style: 'normal',
                             alignment: 'center'
                         }, {
@@ -384,7 +424,7 @@
                             alignment: 'center'
                         },
                         {
-                            text: 'วันที่..........................',
+                            text: 'วันที่ ' + latestTestResultTime,
                             style: 'normal',
                             alignment: 'center'
                         },
@@ -398,7 +438,7 @@
 
                         },
                         {
-                            text: '(                                                 )',
+                            text: '( ' + sampleData.reviewer_name.toString() + ')',
                             style: 'normal',
                             alignment: 'center'
                         },
@@ -408,7 +448,7 @@
                             alignment: 'center'
                         },
                         {
-                            text: 'วันที่........................',
+                            text: 'วันที่ ' + latestConfirmationTime,
                             style: 'normal',
                             alignment: 'center'
                         },
@@ -435,7 +475,7 @@
                     },
 
                     {
-                        text: 'วันที่............................',
+                        text: 'วันที่ ' + latestConfirmationTime,
                         style: 'normal',
                         alignment: 'center'
                     },

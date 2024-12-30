@@ -55,4 +55,16 @@ class samplepanel extends CI_Controller
         $userData = $this->session->userdata('user_data');
         $this->load->model("Sampletestservicemodel");
     }
+
+    public function printresult()
+    {
+        $userData = $this->session->userdata('user_data');
+        $this->load->view("result/printresult", $userData);
+    }
+
+    public function approveresult()
+    {
+        $userData = $this->session->userdata('user_data');
+        $this->load->view("result/approve", $userData);
+    }
 }

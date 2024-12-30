@@ -239,7 +239,7 @@
                                             <label class="control-label  align-self-center form-control-sm">รายงานผลค่าความไม่แน่นอนของวิธีทดสอบ</label>
                                         </div>
                                         <div class="col-sm-3">
-                                            <select name="ReportmethodName" id="ReportmethodName" class="form-control form-control-sm" data-style="py-0" required>
+                                            <select name="Reportuncertainty" id="Reportuncertainty" class="form-control form-control-sm" data-style="py-0" required>
                                                 <option value="">กรุณาระบุ</option>
                                                 <option>ต้องการ</option>
                                                 <option>ไม่ต้องการ</option>
@@ -703,7 +703,7 @@
                     }
 
 
-                    textReportmethodName.textContent = sampledata.ReportmethodName;
+                    textReportmethodName.textContent = sampledata.Reportuncertainty;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

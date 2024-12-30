@@ -229,3 +229,247 @@ DEBUG - 2024-09-26 10:48:09 --> Global POST, GET and COOKIE data sanitized
 DEBUG - 2024-09-26 10:48:09 --> Global POST, GET and COOKIE data sanitized
 DEBUG - 2024-09-26 10:48:09 --> Total execution time: 0.0873
 DEBUG - 2024-09-26 10:48:09 --> Total execution time: 0.1075
+DEBUG - 2024-09-26 10:49:48 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:49:48 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:49:48 --> Total execution time: 0.0764
+DEBUG - 2024-09-26 10:49:51 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:49:51 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:49:51 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:49:51 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:49:51 --> Total execution time: 0.0816
+DEBUG - 2024-09-26 10:49:55 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:01 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:01 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:01 --> Total execution time: 0.0382
+DEBUG - 2024-09-26 10:50:02 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:02 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:02 --> Total execution time: 0.0461
+DEBUG - 2024-09-26 10:50:02 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:02 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:02 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:02 --> Total execution time: 0.0732
+DEBUG - 2024-09-26 10:50:07 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:07 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:07 --> Total execution time: 0.0676
+DEBUG - 2024-09-26 10:50:14 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:14 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:14 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:50:14'
+WHERE `id` = '864'
+DEBUG - 2024-09-26 10:50:14 --> Total execution time: 0.0628
+DEBUG - 2024-09-26 10:50:16 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:16 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:16 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:16 --> Total execution time: 0.0454
+DEBUG - 2024-09-26 10:50:18 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:18 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:18 --> Total execution time: 0.0398
+DEBUG - 2024-09-26 10:50:20 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:20 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:20 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:50:20'
+WHERE `id` = '865'
+DEBUG - 2024-09-26 10:50:20 --> Total execution time: 0.0475
+DEBUG - 2024-09-26 10:50:24 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:24 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:24 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:24 --> Total execution time: 0.0591
+DEBUG - 2024-09-26 10:50:25 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:25 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:25 --> Total execution time: 0.0594
+DEBUG - 2024-09-26 10:50:28 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:28 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:28 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:50:28'
+WHERE `id` = '867'
+DEBUG - 2024-09-26 10:50:28 --> Total execution time: 0.0482
+DEBUG - 2024-09-26 10:50:31 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:31 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:31 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:31 --> Total execution time: 0.0600
+DEBUG - 2024-09-26 10:50:32 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:32 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:33 --> Total execution time: 0.0355
+DEBUG - 2024-09-26 10:50:33 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:33 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:33 --> Total execution time: 0.0391
+DEBUG - 2024-09-26 10:50:34 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:34 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:34 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:50:34 --> Total execution time: 0.0748
+DEBUG - 2024-09-26 10:50:43 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:43 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:43 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 20, 10
+DEBUG - 2024-09-26 10:50:43 --> Total execution time: 0.0615
+DEBUG - 2024-09-26 10:50:50 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:50 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:50 --> Total execution time: 0.0724
+DEBUG - 2024-09-26 10:50:55 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:55 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:55 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:50:55'
+WHERE `id` = '892'
+DEBUG - 2024-09-26 10:50:55 --> Total execution time: 0.0411
+DEBUG - 2024-09-26 10:50:57 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:57 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:57 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 20, 10
+DEBUG - 2024-09-26 10:50:57 --> Total execution time: 0.0520
+DEBUG - 2024-09-26 10:50:59 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:50:59 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:50:59 --> Total execution time: 0.0729
+DEBUG - 2024-09-26 10:51:02 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:02 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:02 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:51:02'
+WHERE `id` = '893'
+DEBUG - 2024-09-26 10:51:02 --> Total execution time: 0.0653
+DEBUG - 2024-09-26 10:51:05 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:05 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:05 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 20, 10
+DEBUG - 2024-09-26 10:51:05 --> Total execution time: 0.0611
+DEBUG - 2024-09-26 10:51:09 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:09 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:09 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:51:09 --> Total execution time: 0.0597
+DEBUG - 2024-09-26 10:51:13 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:13 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:13 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10, 10
+DEBUG - 2024-09-26 10:51:13 --> Total execution time: 0.0589
+DEBUG - 2024-09-26 10:51:16 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:16 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:16 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 20, 10
+DEBUG - 2024-09-26 10:51:16 --> Total execution time: 0.0390
+DEBUG - 2024-09-26 10:51:18 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:18 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:18 --> Total execution time: 0.0431
+DEBUG - 2024-09-26 10:51:21 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:21 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:21 --> UPDATE `es_sampletestservice` SET `testvalue` = 'Test', `methodName` = 'Method 1', `completetime` = '2024-09-26 10:51:21'
+WHERE `id` = '894'
+DEBUG - 2024-09-26 10:51:21 --> Total execution time: 0.0440
+DEBUG - 2024-09-26 10:51:24 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:24 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:24 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 20, 10
+DEBUG - 2024-09-26 10:51:24 --> Total execution time: 0.0609
+DEBUG - 2024-09-26 10:51:31 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:31 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:31 --> Total execution time: 0.0387
+DEBUG - 2024-09-26 10:51:31 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:31 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:31 --> Total execution time: 0.0353
+DEBUG - 2024-09-26 10:51:32 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:32 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:32 --> Total execution time: 0.0520
+DEBUG - 2024-09-26 10:51:38 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:38 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:38 --> Total execution time: 0.0599
+DEBUG - 2024-09-26 10:51:43 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:51:43 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:51:43 --> SELECT *
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+WHERE `sampleid` = '66'
+DEBUG - 2024-09-26 10:51:43 --> Total execution time: 0.0406
+DEBUG - 2024-09-26 10:52:49 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:52:49 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:52:49 --> Total execution time: 0.0489
+DEBUG - 2024-09-26 10:52:49 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:52:49 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:52:49 --> Total execution time: 0.0553
+DEBUG - 2024-09-26 10:52:50 --> UTF-8 Support Enabled
+DEBUG - 2024-09-26 10:52:50 --> Global POST, GET and COOKIE data sanitized
+DEBUG - 2024-09-26 10:52:50 --> SELECT `ta`.`docnumber`, `st`.`operationnumber`, `st`.`samplename`, `s`.`method`, `s`.`service`, `ta`.`senderAgencyname`, `sts`.`assigntime`, `sts`.`id`, `sts`.`testvalue`, `sts`.`unit`, `sts`.`methodName`, `sts`.`completetime`
+FROM `es_sampletestservice` `sts`
+JOIN `es_service` `s` ON `sts`.`serviceid` = `s`.`id`
+JOIN `es_sampletest` `st` ON `sts`.`sampleid` = `st`.`sampleid`
+JOIN `es_testapp` `ta` ON `st`.`testid` = `ta`.`testid`
+WHERE `sts`.`userrespon` = '001'
+AND `sts`.`completetime` IS NULL
+ LIMIT 10
+DEBUG - 2024-09-26 10:52:50 --> Total execution time: 0.0734

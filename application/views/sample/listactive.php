@@ -361,6 +361,7 @@
                                 ' <a class="btn btn-sm bg-success"  data-toggle="tooltip" data-placement="top" title="แสดงเอกสารหลักฐาน" data-original-title="Edit" onclick="showdoc(\'' + row.testid + '\')"><i class="ri-pencil-line mr-0"></i></a>' +
                                 ' <a class="btn btn-sm bg-warning" data-toggle="tooltip" data-placement="top" title="กำหนดผู้รับผิดชอบตัวอย่าง" data-original-title="Delete" onclick="addstaff(\'' + row.testid + '\')"><i class=" ri-contacts-line mr-0"></i></a>' +
                                 ' <a class="btn btn-sm bg-info" data-toggle="tooltip" data-placement="top" title="แสดงรายละเอียดOperation"  onclick="showOperation(\'' + row.testid + '\')"><i class=" ri-book-line mr-0"></i></a>' +
+                                ' <a class="btn btn-sm bg-danger" data-toggle="tooltip" data-placement="top" title="แสดงผลการทดสอบ" onclick="showTestResults(\'' + row.testid + '\')"><i class="ri-flask-line mr-0"></i></a>' +
                                 '</div>';
                         }
                     }
@@ -371,6 +372,202 @@
 
 
         });
+
+        function showTestResults(testid) {
+            // First, get the sample details
+            $.ajax({
+                url: '<?php echo site_url("sample/samplecontrol/getsampleid"); ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    testid: testid
+                },
+                success: function(sampleData) {
+                    // Then get results for each sample
+                    var sampleDetails = sampleData.Sampledetail;
+                    var allResults = [];
+                    var processedSamples = 0;
+
+                    sampleDetails.forEach(function(sample) {
+                        $.ajax({
+                            url: '<?php echo site_url("sample/samplecontrol/getAllResultOperationdetail"); ?>',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                sampleid: sample.sampleid
+                            },
+                            success: function(results) {
+                                allResults = allResults.concat(results);
+                                processedSamples++;
+
+                                // Once all samples are processed, show the modal
+                                if (processedSamples === sampleDetails.length) {
+                                    showResultsModal(sampleData.Sample[0], sampleData.Sampledetail, allResults);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Ajax error:', error);
+                                alert("เกิดข้อผิดพลาดในการโหลดผลการทดสอบ กรุณาลองใหม่อีกครั้ง");
+                            }
+                        });
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax error:', error);
+                    alert("เกิดข้อผิดพลาดในการโหลดข้อมูลตัวอย่าง กรุณาลองใหม่อีกครั้ง");
+                }
+            });
+        }
+
+        function showResultsModal(sampleData, sampleDetails, results) {
+            // Group results by sampleid
+            var groupedResults = {};
+            var sampleInfo = {};
+
+            // Create lookup object for sample details
+            sampleDetails.forEach(function(detail) {
+                sampleInfo[detail.sampleid] = {
+                    samplename: detail.samplename,
+                    textpack: detail.textpack,
+                    appearance: detail.appearance,
+                    amount: detail.amount,
+                    operationnumber: detail.operationnumber
+                };
+            });
+
+            // Group results by sampleid
+            results.forEach(function(result) {
+                if (!groupedResults[result.sampleid]) {
+                    groupedResults[result.sampleid] = [];
+                }
+                groupedResults[result.sampleid].push(result);
+            });
+
+            var modalContent = `
+        <div class="modal fade" id="testResultsModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">ผลการทดสอบตัวอย่าง</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-white mb-0">เลขที่เอกสาร: ${sampleData.docnumber}</h6>
+                                        <h6 class="text-white mb-0">ชื่อตัวอย่าง: ${sampleData.sampleName}</h6>
+                                        <h6 class="text-white mb-0">วันที่: ${formatThaiDate(sampleData.activeDate)}</h6>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <h6 class="text-white mb-0">ผู้ส่งตัวอย่าง: ${sampleData.senderAgencyname}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="resultsTable">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="text-center" width="5%">ลำดับ</th>
+                                                <th width="25%">รายการทดสอบ</th>
+                                                <th width="20%">วิธีการทดสอบ</th>
+                                                <th width="20%">ผลการทดสอบ</th>
+                                                <th width="20%">วิธีที่ใช้</th>
+                                                <th width="10%">สถานะ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="testResultsBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+            // Remove existing modal if any
+            $('#testResultsModal').remove();
+
+            // Append new modal to body
+            $('body').append(modalContent);
+
+            // Populate results
+            var tbody = $('#testResultsBody');
+            var index = 1;
+
+            // For each sample group
+            Object.keys(groupedResults).forEach(function(sampleid) {
+                var sampleResults = groupedResults[sampleid];
+                var sample = sampleInfo[sampleid] || {};
+
+                // Add sample header row with detailed information
+                tbody.append(`
+            <tr class="bg-light">
+                <td colspan="6" class="sample-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>${sample.samplename || 'ไม่ระบุชื่อตัวอย่าง'}</strong>
+                            ${sample.operationnumber ? `<br><small>เลขที่: ${sample.operationnumber}</small>` : ''}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="sample-details">
+                                ${sample.textpack ? `<small class="mr-3">รายละเอียด: ${sample.textpack}</small>` : ''}
+                                ${sample.appearance ? `<small class="mr-3">ลักษณะ: ${sample.appearance}</small>` : ''}
+                                ${sample.amount ? `<small>ปริมาณ: ${sample.amount}</small>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `);
+
+                // Add results for this sample
+                sampleResults.forEach(function(result) {
+                    var status = getStatusBadge(result);
+
+                    var row = `
+                <tr>
+                    <td class="text-center">${index++}</td>
+                    <td>${result.service || '-'}</td>
+                    <td>${result.method || '-'}</td>
+                    <td>${result.testvalue || '-'}</td>
+                    <td>${result.methodName || '-'}</td>
+                    <td class="text-center">${status}</td>
+                </tr>`;
+                    tbody.append(row);
+                });
+            });
+
+            // Show modal
+            $('#testResultsModal').modal('show');
+        }
+
+        function getStatusBadge(result) {
+            if (result.confirmtime) {
+                return '<span class="badge badge-success">ยืนยันแล้ว</span>';
+            } else if (result.completetime) {
+                return '<span class="badge badge-warning">รอยืนยัน</span>';
+            } else {
+                return '<span class="badge badge-danger">รอผล</span>';
+            }
+        }
+
+        function formatThaiDate(dateString) {
+            if (!dateString) return '-';
+
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
 
 
         function openPDF(recallTrack) {
@@ -488,7 +685,7 @@
                     }
 
 
-                    textReportmethodName.textContent = sampledata.ReportmethodName;
+                    textReportmethodName.textContent = sampledata.Reportuncertainty;
                     textMethodTest.textContent = sampledata.MethodTest;
                     textReturnsample.textContent = sampledata.Returnsample;
 

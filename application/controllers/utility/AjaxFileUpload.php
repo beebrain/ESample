@@ -59,10 +59,36 @@ class AjaxFileUpload extends CI_Controller
 
 
 
-
     function upload_fileGeneral($uploadPath)
     {
+        try {
+            $this->load->library('upload');
+        } catch (Exception $e) {
+            log_message("Debug", $e->getMessage());
+            $msg["status"] = "error";
+            $msg["msg"] = $e->getMessage();
+        }
 
+        // // Check if directory exists, if not create it
+        if (!file_exists($uploadPath)) {
+            if (!mkdir($uploadPath, 0777, true)) {
+                $msg["status"] = "error";
+                $msg["msg"] = "Failed to create upload directory: " . $uploadPath;
+                echo json_encode($msg);
+                return;
+            }
+        }
+
+        // Check if directory is writable
+        if (!is_writable($uploadPath)) {
+            $msg["status"] = "error";
+            $msg["msg"] = "Upload directory is not writable: " . $uploadPath;
+            echo json_encode($msg);
+            return;
+        }
+
+
+        log_message("Debug", "upload file");
         //upload file
         $config['upload_path'] = $uploadPath;
         $config['allowed_types'] = 'pdf|docx|png|jpg|zip|rar';
@@ -70,6 +96,9 @@ class AjaxFileUpload extends CI_Controller
         $config['encrypt_name'] = TRUE;
         $config['max_size'] = 1024 * 1000; //1 MB
         $config['remove_spaces'] = TRUE;
+
+        $this->upload->initialize($config);
+
 
         if (isset($_FILES['file']['name'])) {
             if (0 < $_FILES['file']['error']) {
@@ -96,7 +125,6 @@ class AjaxFileUpload extends CI_Controller
                 }
             }
         } else {
-            // echo 'Please choose a file';
             $msg["status"] = "error";
             $msg["msg"] = 'Please choose a file';
             echo json_encode($msg);

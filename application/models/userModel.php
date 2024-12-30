@@ -121,4 +121,31 @@ class userModel extends CI_Model
     $query = $this->db->get();
     return $query->num_rows();
   }
+
+  public function checkloginuser($user, $password)
+  {
+    if ($user <> NULL && $password <> NULL) {
+      $this->db->where('email', $user);
+      $this->db->where('password', md5($password));
+      // $this->db->where_not_in('active', "-1");
+    }
+    $query = $this->db->get('es_user');
+    if ($query == null) {
+      return NULL;
+    }
+    $result = $query;
+    return $result;
+  }
+
+  public function getFullName($uid)
+  {
+    if (empty($uid)) return 'ไม่ระบุ';
+
+    $this->db->select("CONCAT_WS(' ', title, gf_name, gl_name) as full_name");
+    $this->db->where('uid', $uid);
+    $query = $this->db->get('es_user');
+
+    $result = $query->row();
+    return $result ? $result->full_name : 'ไม่ระบุ';
+  }
 }

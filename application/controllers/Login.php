@@ -14,10 +14,15 @@ class Login extends CI_Controller
     {
         // call BPT Google Login
         // redirect('https://info.uru.ac.th/bptcarbon/academic/');
-        $this->login();
+        $this->login2();
     }
 
 
+    public function login2()
+    {
+
+        $this->load->view("login2.php");
+    }
 
     public function login()
     {
@@ -98,5 +103,36 @@ class Login extends CI_Controller
         $this->session->unset_userdata('user_data');
 
         redirect('login/login');
+    }
+
+
+    public function checklogin()
+    {
+        $this->session->unset_userdata('user_data');
+
+        $data = $this->input->post();
+        $data['email'] = strtolower($data['email']);
+
+        $user_data = $this->userModel->checkloginuser($data["email"], $data["password"]);
+        $message["info"] = "login";
+        if ($user_data->num_rows() == 1) {
+            $data = $user_data->result_array()[0];
+            if ($data["active"] == '1') {
+                $message["url"] = base_url('index.php/user/userpanel');
+                $message["info"] = "login";
+                // $message["data"] = $data;
+                $this->session->set_userdata('user_data', $data);
+                // redirect(base_url('index.php/Userpanel/'));
+            } else {
+                $message["url"] = "";
+                $message["info"] = "Email นี้ยังไม่ได้ทำการ ยืนยันโปรดตรวจสอบ Email เพื่อยืนยันบัญชี";
+                $this->session->unset_userdata('user_data');
+            }
+        } else {
+            $message["url"] = "";
+            $message["info"] = "Email or Password is wrong.";
+            $this->session->unset_userdata('user_data');
+        }
+        echo json_encode($message);
     }
 }
